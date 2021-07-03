@@ -1,11 +1,22 @@
-const express = require("express")
+// mongodb
+require("./config/db");
 
-const port = process.env.PORT || 3000
+const app = require("express")();
+const port = process.env.PORT || 3000;
 
-const app = express()
+//cors
+const cors = require("cors");
+app.use(cors());
 
-app.use("*/heartbeat", (req, res) => res.status(200).json({status: 200, message: "I'm fine, Thank you.!"}))
+// const UserRouter = require("./api/User");
+const UserRouter = require("./User")
+
+// For accepting post form data
+const bodyParser = require("express").json;
+app.use(bodyParser());
+
+app.use("*/user", UserRouter);
 
 app.listen(port, () => {
-    console.log(`App running on port ${port}`)
-})
+  console.log(`Server running on port ${port}`);
+});
