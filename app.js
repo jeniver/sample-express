@@ -10,7 +10,7 @@ app.use(bodyParser());
 const cors = require("cors");
 app.use(cors());
 
-const UserRouter = require("./services/userServices");
+const UserRouter = require("./route/index");
 
 app.use("/auth", UserRouter);
 

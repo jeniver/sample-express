@@ -1,14 +1,46 @@
 const express = require("express");
-const router = express.Router();
+const APIError = require('../helper/api-error');
+const httpStatus = require('http-status');
+const mongoose = require('mongoose');
 
 // mongodb user model
-// const User = require("./../models/User_Model");
+const User = require("./../models/User_Model");
 
 // Password handler
-// const bcrypt = require("bcrypt");
+const app = express();
+
+
+
+
+const singUp = async (name, email, password) => {
+  
+  let session = null;
+  try {
+    session = await mongoose.startSession();
+    session.startTransaction();
+    const userEmailID = email.trim();
+
+    const userDetails = await User.find({ userEmailID });
+   
+      const newUser = new User({name,email,password});
+
+      const addUsers = await newUser.save({ session });
+      console.log("test" , addUsers)
+      if(addUsers){
+      await session.commitTransaction();
+     
+      return 
+
+      
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+  
+};
 
 // Signup
-router.post("/signup", (req, res) => {
+// router.post("/signup", (req, res) => {
 //   let { name, email, password } = req.body;
 //   name = name.trim();
 //   email = email.trim();
@@ -90,11 +122,12 @@ router.post("/signup", (req, res) => {
 //         });
 //       });
 //   }
-});
+// });
+
+
 
 // Signin
-router.post("/signin", (req, res) => {
-    res.status(200).json({status: 200, message: "I'm fine, Thank you.!"})
+// router.post("/signin", (req, res) => {
 //   let { email, password } = req.body;
 //   email = email.trim();
 //   password = password.trim();
@@ -149,6 +182,9 @@ router.post("/signin", (req, res) => {
 //         });
 //       });
 //   }
-});
+// });
 
-module.exports = router;
+
+module.exports = {
+  singUp
+}
