@@ -1,6 +1,6 @@
 {
   "name": "test-node",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Express app for testing purposes",
   "main": "app.js",
   "scripts": {

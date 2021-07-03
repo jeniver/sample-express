@@ -11,7 +11,7 @@ app.use(cors());
 // const UserRouter = require("./api/User");
 const UserRouter = require("./User")
 
-app.use("*/heartbeat", (req, res) => res.status(200).json({status: 200, message: "I'm fine, Thank you.!"}))
+
 
 
 // For accepting post form data
