@@ -13,7 +13,7 @@
   ],
   "author": "vikum-samare",
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "chalk": "^4.1.1",
     "cors": "^2.8.5",
     "express": "4.17.1",

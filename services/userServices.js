@@ -1,7 +1,7 @@
 const express = require("express");
 const APIError = require("../helper/api-error");
 const httpStatus = require("http-status");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 
 
