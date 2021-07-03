@@ -3,6 +3,9 @@ const APIError = require("../helper/api-error");
 const httpStatus = require("http-status");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
+const jwt = require('jsonwebtoken')
+
+const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 
 
 // mongodb user model
@@ -51,7 +54,15 @@ const singIn = async ( email , password ) => {
       if (await bcrypt.compare(password, user.password)) {
           // the username, password combination is successful
           await session.commitTransaction();
-          return  user 
+          const token = jwt.sign(
+			{
+				id: user._id,
+				username: user.name
+			},
+			JWT_SECRET
+		)
+        const response = { data: user , accesstoken : token }
+          return  response 
       }
     } catch (error) {
       console.log(error);
