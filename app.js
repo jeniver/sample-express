@@ -1,10 +1,18 @@
 const express = require("express")
-
+require("./config/db");
 const port = process.env.PORT || 3000
 
 const app = express()
 
-app.use("*/heartbeat", (req, res) => res.status(200).json({status: 200, message: "I'm fine, Thank you.!"}))
+const bodyParser = require("express").json;
+app.use(bodyParser());
+
+const cors = require("cors");
+app.use(cors());
+
+const UserRouter = require("./services/userServices");
+
+app.use("/auth", UserRouter);
 
 app.listen(port, () => {
     console.log(`App running on port ${port}`)
