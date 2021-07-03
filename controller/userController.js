@@ -11,6 +11,17 @@ const singUp = async (req, res, next) => {
   }
 };
 
+const singIn = async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+      const data = await UserService.singIn( email, password);
+      return res.status(httpStatus.OK).json(data);
+    } catch (error) {
+      return next(error);
+    }
+  };
+
 module.exports = {
   singUp,
+  singIn
 };

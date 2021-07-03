@@ -1,7 +1,11 @@
 const express = require("express");
 const APIError = require("../helper/api-error");
 const httpStatus = require("http-status");
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
+const jwt = require('jsonwebtoken')
+
+const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 
 // mongodb user model
 const User = require("./../models/User_Model");
@@ -34,149 +38,49 @@ const singUp = async (name, email, password) => {
   }
 };
 
-// Signup
-// router.post("/signup", (req, res) => {
-//   let { name, email, password } = req.body;
-//   name = name.trim();
-//   email = email.trim();
-//   password = password.trim();
-// console.log( name, email, password  )
-//   if (name == "" || email == "" || password == "") {
-//     res.json({
-//       status: "FAILED",
-//       message: "Empty input fields!",
-//     });
-//   } else if (!/^[a-zA-Z ]*$/.test(name)) {
-//     res.json({
-//       status: "FAILED",
-//       message: "Invalid name entered",
-//     });
-//   } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-//     res.json({
-//       status: "FAILED",
-//       message: "Invalid email entered",
-//     });
-//   } else if (password.length < 8) {
-//     res.json({
-//       status: "FAILED",
-//       message: "Password is too short!",
-//     });
-//   } else {
-//     // Checking if user already exists
-//     User.find({ email })
-//       .then((result) => {
-//         if (result.length) {
-//           // A user already exists
-//           res.json({
-//             status: "FAILED",
-//             message: "User with the provided email already exists",
-//           });
-//         } else {
-//           // Try to create new user
 
-//           // password handling
-//           const saltRounds = 10;
-//           bcrypt
-//             .hash(password, saltRounds)
-//             .then((hashedPassword) => {
-//               const newUser = new User({
-//                 name,
-//                 email,
-//                 password: hashedPassword
-//               });
+const singIn = async ( email , password ) => {
+    let session = null;
+    try {
+      session = await mongoose.startSession();
+      session.startTransaction();
+      const user = await User.findOne({ email }).lean()
 
-//               newUser
-//                 .save()
-//                 .then((result) => {
-//                   res.json({
-//                     status: "SUCCESS",
-//                     message: "Signup successful",
-//                     data: result,
-//                   });
-//                 })
-//                 .catch((err) => {
-//                   res.json({
-//                     status: "FAILED",
-//                     message: "An error occurred while saving user account!",
-//                   });
-//                 });
-//             })
-//             .catch((err) => {
-//               res.json({
-//                 status: "FAILED",
-//                 message: "An error occurred while hashing password!",
-//               });
-//             });
-//         }
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//         res.json({
-//           status: "FAILED",
-//           message: "An error occurred while checking for existing user!",
-//         });
-//       });
-//   }
-// });
+      if (!user) {
+          return 
+      }
+  
+      if (await bcrypt.compare(password, user.password)) {
+          // the username, password combination is successful
+  
+          const token = jwt.sign(
+              {
+                  id: user._id,
+                  username: user.username
+              },
+              JWT_SECRET
+          )
 
-// Signin
-// router.post("/signin", (req, res) => {
-//   let { email, password } = req.body;
-//   email = email.trim();
-//   password = password.trim();
+          const response = { data:user , assesToken:token}
 
-//   if (email == "" || password == "") {
-//     res.json({
-//       status: "FAILED",
-//       message: "Empty credentials supplied",
-//     });
-//   } else {
-//     // Check if user exist
-//     User.find({ email })
-//       .then((data) => {
-//         if (data.length) {
-//           // User exists
 
-//           const hashedPassword = data[0].password;
-//           bcrypt
-//             .compare(password, hashedPassword)
-//             .then((result) => {
-//               if (result) {
-//                 // Password match
-//                 res.json({
-//                   status: "SUCCESS",
-//                   message: "Signin successful",
-//                   value: data,
-//                 });
-//               } else {
-//                 res.json({
-//                   status: "FAILED",
-//                   message: "Invalid password entered!",
-//                 });
-//               }
-//             })
-//             .catch((err) => {
-//               res.json({
-//                 status: "FAILED",
-//                 message: "An error occurred while comparing passwords",
-//               });
-//             });
-//         } else {
-//           res.json({
-//             status: "FAILED",
-//             message: "Invalid credentials entered!",
-//           });
-//         }
-//       })
-//       .catch((err) => {
-//         res.json({
-//           status: "FAILED",
-//           message: "An error occurred while checking for existing user",
-//         });
-//       });
-//   }
-// });
+  
+          return  response 
+      }
+    } catch (error) {
+      console.log(error);
+      await session.abortTransaction();
+      throw new Error(error);
+    } finally {
+      session.endSession();
+    }
+
+
+}
+
+
 
 module.exports = {
   singUp,
+  singIn
 };
