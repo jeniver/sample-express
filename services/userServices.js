@@ -1,7 +1,7 @@
 const express = require("express");
-const APIError = require('../helper/api-error');
-const httpStatus = require('http-status');
-const mongoose = require('mongoose');
+const APIError = require("../helper/api-error");
+const httpStatus = require("http-status");
+const mongoose = require("mongoose");
 
 // mongodb user model
 const User = require("./../models/User_Model");
@@ -9,34 +9,29 @@ const User = require("./../models/User_Model");
 // Password handler
 const app = express();
 
-
-
-
 const singUp = async (name, email, password) => {
-  
   let session = null;
   try {
     session = await mongoose.startSession();
     session.startTransaction();
-    const userEmailID = email.trim();
-
-    const userDetails = await User.find({ userEmailID });
-   
-      const newUser = new User({name,email,password});
-
+    const userDetails = await User.find({ email });
+    if (userDetails.length > 0) {
+      console.log("wrong")
+    } else {
+      const newUser = new User({ name, email, password });
       const addUsers = await newUser.save({ session });
-      console.log("test" , addUsers)
-      if(addUsers){
-      await session.commitTransaction();
-     
-      return 
-
-      
+      if (addUsers) {
+        await session.commitTransaction();
+        return addUsers;
+      }
     }
   } catch (error) {
+    console.log(error);
+    await session.abortTransaction();
     throw new Error(error);
+  } finally {
+    session.endSession();
   }
-  
 };
 
 // Signup
@@ -124,8 +119,6 @@ const singUp = async (name, email, password) => {
 //   }
 // });
 
-
-
 // Signin
 // router.post("/signin", (req, res) => {
 //   let { email, password } = req.body;
@@ -184,7 +177,6 @@ const singUp = async (name, email, password) => {
 //   }
 // });
 
-
 module.exports = {
-  singUp
-}
+  singUp,
+};
