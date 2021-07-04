@@ -2,6 +2,7 @@ const express = require("express");
 const APIError = require("../helper/api-error");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
+const moment = require("moment");
 const jwt = require('jsonwebtoken')
 const { Ok, ServerError, BadRequest, Unauthorised, NotFound, Forbidden } = require('../helper/api-error')
 
@@ -33,6 +34,7 @@ const User = require("./../models/User_Model");
 const app = express();
 
 const singUp = async (name, email, password) => {
+    console.log(name)
   let session = null;
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(password, salt);
@@ -64,6 +66,16 @@ const singIn = async ( email , password ) => {
     try {
       session = await mongoose.startSession();
       session.startTransaction();
+      const access = moment().add(60 , 'minutes');
+      const playload = {
+        exp: access.unix(),
+        iat: moment().unix(),
+        sub: {
+          id: this._id, // eslint-disable-line
+          type: 'user',
+        },
+      };
+
       const user = await User.findOne({ email }).lean()
 
       if (!user) {
@@ -80,8 +92,20 @@ const singIn = async ( email , password ) => {
 			},
 			JWT_SECRET
 		)
-        const response = { data: user , accesstoken : token }
-          return  Ok("SignIn successfully",response);  
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: user._id},
+            {
+              token_data: {
+                access_token: jwt.sign(playload, JWT_SECRET),
+                access_token_exp: access,
+                refresh_token: JWT_SECRET,
+                refresh_token_exp: 60* 60,
+              },
+              updated: moment(),
+            },
+            { new: true, session }
+          );
+          return  Ok("SignIn successfully",user);  
       }
       return BadRequest("Invalid Password / Invalid Email id ")
     } catch (error) {
