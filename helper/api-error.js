@@ -1,19 +1,25 @@
-const httpStatus = require('http-status');
-
-class APIError extends Error {
-  constructor({ message, errors, stack, status = httpStatus.INTERNAL_SERVER_ERROR, isPublic = false }) {
-    super(message);
-    this.message = message;
-    this.errors = errors;
-    this.status = status;
-    this.isPublic = isPublic;
-    this.isOperational = true;
-    this.stack = stack;
-
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor);
+const response = (status, message, data) => {
+    const resp = {
+        status,
+        message
     }
-  }
+    return data ? { ...resp, data } : resp
 }
 
-module.exports = APIError;
+const Ok = (message, data) => response(200, message, data)
+const BadRequest = (message) => response(400, message)
+const Unauthorised = (message) => response(401, message)
+const NotFound = (message) => response(404, message)
+const Forbidden = (message) => response(403, message)
+const ServerError = (message) => response(500, message)
+const HttpError = (status = 500, message, data = false) => response(status, message, data)
+
+module.exports = {
+    BadRequest,
+    Ok,
+    NotFound,
+    ServerError,
+    Unauthorised,
+    HttpError,
+    Forbidden
+}
