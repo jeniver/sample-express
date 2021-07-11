@@ -4,8 +4,6 @@ require("./config/db");
 const port = process.env.PORT || 3000
 
 const app = express()
-const http = require('http').createServer(app);
-const io = require("socket.io")(http);
 
 
 const bodyParser = require("express").json;
@@ -26,9 +24,4 @@ app.listen(port, () => {
 
 
 
-io.on("connection", socket => {
-  socket.on('notification' , ({titel , message}) => {
-    io.emit('notification' , {titel , message} )
-})
 
-})

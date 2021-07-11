@@ -1,9 +1,6 @@
 
-const mongoose = require("mongoose");
 const moment = require("moment");
 const EventModal = require('../models/Eevent_Model')
-const { sendNotificationToDevice } = require('../helper/firebase_cm');
-const schedule = require('node-schedule');
 const {Ok , ServerError, BadRequest, Unauthorised, NotFound, Forbidden } = require('../helper/api-error')
 
 const formatError = (error) => {
