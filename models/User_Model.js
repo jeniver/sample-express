@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const UserSchema = new Schema({
   name: { type: String, required: false },
@@ -15,6 +15,27 @@ const UserSchema = new Schema({
   updated: { type: Date, default: Date.now, required: true },
 });
 
-const User = mongoose.model("User", UserSchema);
 
-module.exports = User;
+UserSchema.methods.transform = function transform() {
+  const transformed = {};
+  const fields = [
+    '_id',
+    'name',
+    'email',
+    'password',
+    'created',
+    'updated',
+  ];
+  fields.forEach((field) => {
+    if (field in this) {
+      transformed[field] = this[field];
+    }
+  });
+
+  return transformed;
+};
+
+
+module.exports = mongoose.model("User", UserSchema);
+
+

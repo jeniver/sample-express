@@ -34,7 +34,6 @@ const User = require("./../models/User_Model");
 const app = express();
 
 const singUp = async (name, email, password) => {
-    console.log(name)
   let session = null;
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(password, salt);
@@ -120,8 +119,25 @@ const singIn = async ( email , password ) => {
 }
 
 
+const getUserInfo = async (userId) => {
+  console.log(userId)
+  try {
+    const getUser = await User.findOne({ _id: userId }).lean() ; 
+    if (getUser) {
+      return Ok("get user Info",getUser);    ;
+    }
+   
+  } catch (error) {
+    console.log(error)
+    
+  }
+};
+
+
+
 
 module.exports = {
   singUp,
-  singIn
+  singIn,
+  getUserInfo
 };
