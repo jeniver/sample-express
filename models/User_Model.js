@@ -15,6 +15,10 @@ const UserSchema = new Schema({
   updated: { type: Date, default: Date.now, required: true },
 });
 
+UserSchema.methods.generatePasswordReset = function() {
+  this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+  this.resetPasswordExpires = Date.now() + 3600000; //expires in an hour
+};
 
 UserSchema.methods.transform = function transform() {
   const transformed = {};

@@ -22,4 +22,11 @@ module.exports = {
       .isLength({ min:8 , max:10 })
       .withMessage('Password length is invalid'),
   ],
+
+  forgetPassword:[ body('email').exists()
+    .withMessage('Email is required')
+    .trim()
+    .escape()
+    .isEmail()
+    .withMessage('Email is invalid')]
 };

@@ -7,6 +7,8 @@ const validator = require("../validater/userValidater");
 const Eventvalidator = require("../validater/eventValidater");
 const SongController = require("../controller/songController")
 const Notification =require("../controller/notificationContrller")
+
+
 router.post("/signup", validator.registerProfile, (req, res, next) => {
   const validate = validationResult(req);
   if (!validate.isEmpty()) {
@@ -30,5 +32,16 @@ router.get("/notification", Notification.notification);
 router.post("/uploadesong" , SongController.addSonges);
 
 router.get("/get_songe" , SongController.getSonges);
+
+router.post("/forgot-password",validator.forgetPassword, async (req, res, next) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: validate.array().map(({ msg, param }) => ({ msg, param })),
+    });
+  }
+    userController.sendPasswordReset(req, res, next);
+
+})
 
 module.exports = router;

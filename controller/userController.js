@@ -31,8 +31,19 @@ const singIn = async (req, res, next) => {
     }
   };
 
+  const sendPasswordReset = async (req, res, next) => {
+    try {
+      const { email } = req.body;
+      const data = await UserService.getUserInfo(email);
+      return res.status(data.status).json(data);
+    } catch (error) {
+      return next(error);
+    }
+  };
+
 module.exports = {
   singUp,
   singIn,
-  getUserInfo
+  getUserInfo,
+  sendPasswordReset
 };
