@@ -3,8 +3,8 @@ const UserService = require("../services/userServices");
 
 const singUp = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
-    const data = await UserService.singUp(name, email, password);
+    const { name, email, password , phone_number } = req.body;
+    const data = await UserService.singUp(name, email, password , phone_number);
     return res.status(data.status).json(data);
   } catch (error) {
     return next(error);

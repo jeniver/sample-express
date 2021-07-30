@@ -6,7 +6,10 @@ const EventControllers = require("../controller/eventControllers");
 const validator = require("../validater/userValidater");
 const Eventvalidator = require("../validater/eventValidater");
 const SongController = require("../controller/songController")
-const Notification =require("../controller/notificationContrller")
+const Notification =require("../controller/notificationContrller");
+const {upload} = require('../helper/filehelper');
+const HotelReserversion = require('../controller/HotelResrversionControllers')
+const ProductController = require('../controller/ProductController')
 
 
 router.post("/signup", validator.registerProfile, (req, res, next) => {
@@ -43,5 +46,18 @@ router.post("/forgot-password",validator.forgetPassword, async (req, res, next) 
     userController.sendPasswordReset(req, res, next);
 
 })
+
+router.post("/add-hotel" , upload.array('files') , HotelReserversion.addHotels )
+router.post("/edit-hotel" , upload.array('files') , HotelReserversion.editHotels )
+router.get("/getHotels" , HotelReserversion.getHotels )
+router.get("/hotelinfo" , HotelReserversion.getHotelInfo )
+router.get("/removeHotel" , HotelReserversion.removeHotel)
+
+
+router.post("/add-prod" , upload.array('files') , ProductController.addProduct )
+router.post("/edit-prod" , upload.array('files') , ProductController.editProducts )
+router.get("/getproduct" , ProductController.getProducts )
+router.get("/productinfo" , ProductController.getProductInfo)
+router.get("/removeproduct" , ProductController.removeProduct)
 
 module.exports = router;

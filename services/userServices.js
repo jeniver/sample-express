@@ -33,7 +33,7 @@ const User = require("./../models/User_Model");
 // Password handler
 const app = express();
 
-const singUp = async (name, email, password) => {
+const singUp = async (name, email, password , phone_number) => {
   let session = null;
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(password, salt);
@@ -44,7 +44,7 @@ const singUp = async (name, email, password) => {
     if (userDetails.length > 0) {
         return BadRequest("record alrady exciestUser with the provided email already exists")
     } else {
-      const newUser = new User({ name, email, password : hash });
+      const newUser = new User({ name, email , mobile_number : phone_number, password : hash });
       const addUsers = await newUser.save({ session });
       if (addUsers) {
         await session.commitTransaction();

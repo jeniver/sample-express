@@ -5,6 +5,7 @@ const UserSchema = new Schema({
   name: { type: String, required: false },
   email: { type: String, required: false },
   password: { type: String, required: false },
+  mobile_number:{ type: String, required: [true, 'Mobile is required'] },
   token_data: {
     access_token: { type: String, required: false },
     access_token_exp: { type: Date, required: false},
@@ -27,6 +28,7 @@ UserSchema.methods.transform = function transform() {
     'name',
     'email',
     'password',
+    'mobile_number',
     'created',
     'updated',
   ];

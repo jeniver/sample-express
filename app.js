@@ -1,5 +1,6 @@
 const express = require("express");
 require("./config/db");
+const path = require('path');
 const http = require('http');
 const socketio = require('socket.io');
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./helper/messageUser-Config');
@@ -8,11 +9,17 @@ const app = express()
 
 
 const bodyParser = require("express").json;
+
 app.use(bodyParser());
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 const cors = require("cors");
+
 app.use(cors());
+
 const server = http.createServer(app);
+
 const io = socketio(server);
 
 app.use(express.urlencoded({extended : false}));

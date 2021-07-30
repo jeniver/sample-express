@@ -7,6 +7,7 @@ mongoose
   .connect(MOGODB_EV, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false 
   })
   .then(() => {
     console.log("DB Connected");

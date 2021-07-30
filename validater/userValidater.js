@@ -15,6 +15,10 @@ module.exports = {
       .withMessage('Email is invalid')
       .isLength({ min: 1, max: 100 })
       .withMessage('Email length is invalid'),
+    body('phone_number')
+      .exists()
+      .withMessage('Mobile Number is required')
+      .trim(),
     body('password')
       .exists()
       .withMessage('password is required')
