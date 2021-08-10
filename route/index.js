@@ -24,7 +24,11 @@ router.post("/signup", validator.registerProfile, (req, res, next) => {
 
 router.post("/signin", userController.singIn);
 
+router.post("/userupdate" , userController.editUsers)
+
 router.get("/getuserinfo", userController.getUserInfo);
+
+router.get("/getusers", userController.getAllUsers);
 
 router.post("/createevent",EventControllers.addEvent)
 

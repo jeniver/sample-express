@@ -6,6 +6,8 @@ const UserSchema = new Schema({
   email: { type: String, required: false },
   password: { type: String, required: false },
   mobile_number:{ type: String, required: [true, 'Mobile is required'] },
+  user_level:{ type: String, required: false },
+  profile_images: [Object],
   token_data: {
     access_token: { type: String, required: false },
     access_token_exp: { type: Date, required: false},
@@ -29,6 +31,7 @@ UserSchema.methods.transform = function transform() {
     'email',
     'password',
     'mobile_number',
+    'user_level',
     'created',
     'updated',
   ];

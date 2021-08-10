@@ -31,6 +31,15 @@ const singIn = async (req, res, next) => {
     }
   };
 
+  const getAllUsers = async (req , res , next) => {
+    try {
+      const data = await UserService.getAllUsers();
+      return res.status(data.status).json(data);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
   const sendPasswordReset = async (req, res, next) => {
     try {
       const { email } = req.body;
@@ -41,9 +50,36 @@ const singIn = async (req, res, next) => {
     }
   };
 
+  
+const editUsers = async (req, res, next) => {
+  try {
+    const {
+      name, 
+      email, 
+      password , 
+      phone_number,
+      user_level
+    } = req.body;
+    const profile_Pic = req.files;
+    const data = await UserService.UpdateUsers(
+      name, 
+      email, 
+      password , 
+      phone_number,
+      user_level,
+      profile_Pic
+    );
+    return res.status(data.status).json(data);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   singUp,
   singIn,
   getUserInfo,
-  sendPasswordReset
+  sendPasswordReset,
+  getAllUsers,
+  editUsers
 };

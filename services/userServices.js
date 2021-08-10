@@ -133,11 +133,62 @@ const getUserInfo = async (userId) => {
   }
 };
 
+const getAllUsers = async () => {
+  try {
+    const UserList = await User.find();
+    return await Ok("User list",UserList);;
+  } catch (error) {
+    return console.log(error)
+  }
+};
+
+
+const UpdateUsers = async (
+  name, 
+  email, 
+  password , 
+  phone_number,
+  user_level,
+  profile_Pic ) => {
+  let session = null;
+  try {
+      let filesArray = [];
+      profile_Pic.forEach(element => {
+          const file = {
+              fileName: element.originalname,
+              filePath: element.path,
+              fileType: element.mimetype,
+              fileSize: fileSizeFormatter(element.size, 2)
+          }
+          filesArray.push(file);
+      });
+    const users = await  User.findOneAndUpdate(
+      { _id: userId },
+      {
+        name, 
+        email, 
+        password , 
+        mobile_number: phone_number,
+        user_level,
+        profile_images:filesArray,
+     
+    });
+    if (users) {
+      return  await Ok("Users Update Sussesfully",users);
+    }    
+  } catch (error) {
+      console.log("test" , error)
+    return await formatError(error)
+  } 
+}
+
 
 
 
 module.exports = {
   singUp,
   singIn,
-  getUserInfo
+  getUserInfo,
+  getAllUsers,
+  UpdateUsers
 };
