@@ -82,11 +82,25 @@ const formatError = (error) => {
     }
   };
 
+  const filterEvents = async (templeType , temple_name) => {
+    try {
+      const Events = await EventModal.find({
+        created_temple:temple_name ,
+        tempele_type: templeType
+        });
+      return await Ok("Event filter res",Events);;
+    } catch (error) {
+      return console.log(error)
+    }
+  };
+
+
   
 
   module.exports = {
     addEvent,
-    getAllEvents
+    getAllEvents,
+    filterEvents
   };
 
   

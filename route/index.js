@@ -34,6 +34,8 @@ router.post("/createevent",EventControllers.addEvent)
 
 router.get("/getallevent", EventControllers.fetchAllEvents);
 
+router.get("/filter_event", EventControllers.fetchFilterEvents);
+
 router.get("/notification", Notification.notification);
 
 router.post("/uploadesong" , SongController.addSonges);

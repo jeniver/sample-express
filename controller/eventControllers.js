@@ -39,7 +39,19 @@ const fetchAllEvents = async (req, res, next) => {
   }
 };
 
+
+const fetchFilterEvents = async (req, res, next) => {
+  try {
+    const {templeType , temple_name} = req.body;
+    const response = await EventService.filterEvents(templeType , temple_name);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   addEvent,
-  fetchAllEvents
+  fetchAllEvents,
+  fetchFilterEvents
 };
