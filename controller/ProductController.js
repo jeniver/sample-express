@@ -1,5 +1,9 @@
 const ProductServices = require("../services/productService");
 
+const Razorpay=require('razorpay');
+const shortid=require('shortid');
+const cors=require('cors')
+
 const addProduct = async (req, res, next) => {
   try {
     const {
@@ -85,6 +89,30 @@ const editProducts = async (req, res, next) => {
     }
   };
 
+  const razorpay=new Razorpay({
+    key_id:'rzp_test_3WlZn3KxFyA44t',
+    key_secret:'uzetdkRJHPaMPcSfRMu81nIp'
+})
+  const  razorpay_payment = async (req, res, next) => {
+    console.log(123)
+    console.log(req.body)
+    const amount=req.body.amount;
+    const currency=req.body.currency;
+    const payment_capture=5;
+
+    const options={
+        amount:(amount*100),
+        currency:currency,
+        receipt:shortid.generate(),
+        payment_capture:payment_capture
+    }
+    try {
+      const response=await razorpay.orders.create(options)
+      return res.send(response);
+    } catch (error) {
+      return next(error);
+    }
+  };
 
 
 module.exports = {
@@ -92,5 +120,6 @@ addProduct,
 editProducts,
 getProductInfo,
 getProducts,
-removeProduct
+removeProduct,
+razorpay_payment
 };

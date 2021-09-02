@@ -4,7 +4,7 @@
   "description": "Express app for testing purposes",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -30,6 +30,8 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "path": "^0.12.7",
     "pug": "^3.0.2",
+    "razorpay": "^2.0.6",
+    "shortid": "^2.2.16",
     "socket.io": "^4.1.3",
     "web-push": "^3.4.5"
   },

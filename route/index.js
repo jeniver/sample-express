@@ -7,9 +7,11 @@ const validator = require("../validater/userValidater");
 const Eventvalidator = require("../validater/eventValidater");
 const SongController = require("../controller/songController")
 const Notification =require("../controller/notificationContrller");
+
 const {upload} = require('../helper/filehelper');
 const HotelReserversion = require('../controller/HotelResrversionControllers')
-const ProductController = require('../controller/ProductController')
+const ProductController = require('../controller/ProductController');
+const PaymentController=require('../controller/paymentController')
 
 
 router.post("/signup", validator.registerProfile, (req, res, next) => {
@@ -23,21 +25,18 @@ router.post("/signup", validator.registerProfile, (req, res, next) => {
 });
 
 router.post("/signin", userController.singIn);
-
-router.post("/userupdate" , userController.editUsers)
-
+router.post("/userupdate" , userController.editUsers);
 router.get("/getuserinfo", userController.getUserInfo);
-
 router.get("/getusers", userController.getAllUsers);
+router.get("/removeUser/:id" , userController.removeUser);
+router.post("/addUser" , upload.array('files') , userController.addUser)
 
-router.post("/createevent",EventControllers.addEvent)
-
+router.post("/createevent",EventControllers.addEvent);
 router.get("/getallevent", EventControllers.fetchAllEvents);
-
 router.get("/notification", Notification.notification);
+router.get("/removeEvent/:id" , EventControllers.removeEvent)
 
 router.post("/uploadesong" , SongController.addSonges);
-
 router.get("/get_songe" , SongController.getSonges);
 
 router.post("/forgot-password",validator.forgetPassword, async (req, res, next) => {
@@ -63,5 +62,7 @@ router.post("/edit-prod" , upload.array('files') , ProductController.editProduct
 router.get("/getproduct" , ProductController.getProducts )
 router.get("/productinfo" , ProductController.getProductInfo)
 router.get("/removeproduct" , ProductController.removeProduct)
+
+router.post('/razorpay',ProductController.razorpay_payment);
 
 module.exports = router;

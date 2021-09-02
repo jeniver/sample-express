@@ -1,6 +1,8 @@
 
 const moment = require("moment");
 const ProductModel = require('../models/Product_Models')
+const Razorpay=require('razorpay');
+const shortid=require('shortid')
 const {Ok , ServerError, BadRequest, Unauthorised, NotFound, Forbidden } = require('../helper/api-error')
 const formatError = (error) => {
     if (!error) return ServerError("Unknown error", error)
@@ -156,6 +158,12 @@ const fileSizeFormatter = (bytes, decimal) => {
       }
   }
 
+  const razorpay=new Razorpay({
+    key_id:'rzp_test_3WlZn3KxFyA44t',
+    key_secret:'uzetdkRJHPaMPcSfRMu81nIp'
+})
+
+
 
 
 module.exports = {
@@ -163,7 +171,7 @@ addProducts,
 updateProduct,
 getAllProducts,
 getProductDetails,
-deleteProducts
+deleteProducts,
 };
 
   

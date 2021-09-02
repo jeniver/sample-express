@@ -42,7 +42,7 @@ const singUp = async (name, email, password , phone_number) => {
     session.startTransaction();
     const userDetails = await User.find({ email });
     if (userDetails.length > 0) {
-        return BadRequest("record alrady exciestUser with the provided email already exists")
+        return BadRequest("Email address already exist")
     } else {
       const newUser = new User({ name, email , mobile_number : phone_number, password : hash });
       const addUsers = await newUser.save({ session });
@@ -114,8 +114,6 @@ const singIn = async ( email , password ) => {
     } finally {
       session.endSession();
     }
-
-
 }
 
 
@@ -124,6 +122,7 @@ const getUserInfo = async (userId) => {
   try {
     const getUser = await User.findOne({ _id: userId }).lean() ; 
     if (getUser) {
+      console.log(getUser)
       return Ok("get user Info",getUser);    ;
     }
    
@@ -182,13 +181,30 @@ const UpdateUsers = async (
   } 
 }
 
+const deleteUser=async(userId)=>{
+  try {
+    const removeUser = await User.findOneAndDelete({ _id: userId });
+    if (removeUser) {
+      return Ok("Remved  User Info",removeUser);    ;
+    }
+   
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
 
+const addUser=async(data)=>{
+  console.log(data)
 
+}
 
 module.exports = {
   singUp,
   singIn,
   getUserInfo,
   getAllUsers,
-  UpdateUsers
+  UpdateUsers,
+  deleteUser,
+  addUser
 };

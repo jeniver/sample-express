@@ -39,7 +39,19 @@ const fetchAllEvents = async (req, res, next) => {
   }
 };
 
+const removeEvent = async (req, res, next) => {
+  console.log("delete Events")
+  try {
+    const eventId = req.params.id;
+    const response = await EventService.deleteEvents(eventId);
+    return res.status(response.status).json(response);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   addEvent,
-  fetchAllEvents
+  fetchAllEvents,
+  removeEvent
 };

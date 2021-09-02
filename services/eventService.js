@@ -82,11 +82,21 @@ const formatError = (error) => {
     }
   };
 
-  
+  const deleteEvents=async(eventId)=>{
+    try {
+      const removeEvent = await EventModal.findOneAndDelete({ _id: eventId });
+      if (removeEvent) {
+        return Ok("Remved  User Info",removeEvent);
+      }     
+    } catch (error) {
+      console.log(error)      
+    }
+  }
 
   module.exports = {
     addEvent,
-    getAllEvents
+    getAllEvents,
+    deleteEvents
   };
 
   
