@@ -87,4 +87,6 @@ router.get("/getproduct" , ProductController.getProducts )
 router.get("/productinfo" , ProductController.getProductInfo)
 router.get("/removeproduct" , ProductController.removeProduct)
 
+router.post('/razorpay',ProductController.razorpay_payment);
+
 module.exports = router;
