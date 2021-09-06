@@ -1,4 +1,7 @@
 const ProductServices = require("../services/productService");
+const Razorpay=require('razorpay');
+const shortid=require('shortid');
+const cors=require('cors')
 
 const addProduct = async (req, res, next) => {
   try {
@@ -84,6 +87,11 @@ const editProducts = async (req, res, next) => {
       return next(error);
     }
   };
+
+  const razorpay=new Razorpay({
+    key_id:'rzp_test_3WlZn3KxFyA44t',
+    key_secret:'uzetdkRJHPaMPcSfRMu81nIp'
+})
 
   const  razorpay_payment = async (req, res, next) => {
     console.log(123)
