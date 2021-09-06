@@ -9,22 +9,43 @@ const SongController = require("../controller/songController")
 const Notification =require("../controller/notificationContrller");
 const {upload} = require('../helper/filehelper');
 const HotelReserversion = require('../controller/HotelResrversionControllers')
-const ProductController = require('../controller/ProductController')
+const ProductController = require('../controller/ProductController');
+// const multer=require('multer');
+
+// const storage=multer.diskStorage({
+//   destination: function (req, file, cb) {
+//       cb(null, './uploads/');
+//   } ,
+//   filename: function (req,file,cb) {
+//       cb(null, file.originalname)
+//   }
+// });
+// const upload=multer({
+//   storage: storage,
+//   limit:{
+//       filesize: 1024*1024*5
+//   }
+// });
 
 
-router.post("/signup", validator.registerProfile, (req, res, next) => {
-  const validate = validationResult(req);
-  if (!validate.isEmpty()) {
-    return res.status(400).json({
-      errors: validate.array().map(({ msg, param }) => ({ msg, param })),
-    });
-  }
-  userController.singUp(req, res, next);
-});
+
+// router.post("/signup", validator.registerProfile, (req, res, next) => {
+//   console.log("req")
+//   console.log(req.body)
+//   const validate = validationResult(req);
+//   if (!validate.isEmpty()) {
+//     return res.status(400).json({
+//       errors: validate.array().map(({ msg, param }) => ({ msg, param })),
+//     });
+//   }
+//   userController.singUp(req, res, next);
+// });
+
+router.post("/signup",userController.singUp);
 
 router.post("/signin", userController.singIn);
 
-router.post("/userupdate" , userController.editUsers)
+router.post("/userupdate" ,upload.array('files'), userController.editUsers);
 
 router.get("/getuserinfo", userController.getUserInfo);
 

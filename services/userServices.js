@@ -9,6 +9,9 @@ const { Ok, ServerError, BadRequest, Unauthorised, NotFound, Forbidden } = requi
 const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk';
 
 const formatError = (error) => {
+  console.log("error")
+  console.log(error)
+
     if (!error) return ServerError("Unknown error", error)
     const { statusCode } = error
     switch (statusCode) {
@@ -23,6 +26,17 @@ const formatError = (error) => {
         default:
             return ServerError(error)
     }
+
+}
+
+const fileSizeFormatter = (bytes, decimal) => {
+  if(bytes === 0){
+      return '0 Bytes';
+  }
+  const dm = decimal || 2;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'YB', 'ZB'];
+  const index = Math.floor(Math.log(bytes) / Math.log(1000));
+  return parseFloat((bytes / Math.pow(1000, index)).toFixed(dm)) + ' ' + sizes[index];
 
 }
 
@@ -42,7 +56,7 @@ const singUp = async (name, email, password , phone_number) => {
     session.startTransaction();
     const userDetails = await User.find({ email });
     if (userDetails.length > 0) {
-        return BadRequest("record alrady exciestUser with the provided email already exists")
+        return BadRequest("Email Address already exist")
     } else {
       const newUser = new User({ name, email , mobile_number : phone_number, password : hash });
       const addUsers = await newUser.save({ session });
@@ -76,9 +90,9 @@ const singIn = async ( email , password ) => {
       };
 
       const user = await User.findOne({ email }).lean()
-
       if (!user) {
-          return BadRequest("Invalid Email id")
+        console.log(55)
+          return BadRequest("Invalid Email or Password")
       }
   
       if (await bcrypt.compare(password, user.password)) {
@@ -124,6 +138,7 @@ const getUserInfo = async (userId) => {
   try {
     const getUser = await User.findOne({ _id: userId }).lean() ; 
     if (getUser) {
+      console.log(getUser)
       return Ok("get user Info",getUser);    ;
     }
    
@@ -144,14 +159,15 @@ const getAllUsers = async () => {
 
 
 const UpdateUsers = async (
-  name, 
-  email, 
-  password , 
-  phone_number,
-  user_level,
+  userName, 
+      email, 
+      mobile,
   profile_Pic ) => {
   let session = null;
+  var userId="6133bb240b8c194e8003f918"
   try {
+    console.log("UserService")
+    console.log(userName,email,profile_Pic,mobile)
       let filesArray = [];
       profile_Pic.forEach(element => {
           const file = {
@@ -165,11 +181,9 @@ const UpdateUsers = async (
     const users = await  User.findOneAndUpdate(
       { _id: userId },
       {
-        name, 
-        email, 
-        password , 
-        mobile_number: phone_number,
-        user_level,
+        name:userName, 
+        email,  
+        mobile_number: mobile,
         profile_images:filesArray,
      
     });
@@ -181,9 +195,6 @@ const UpdateUsers = async (
     return await formatError(error)
   } 
 }
-
-
-
 
 module.exports = {
   singUp,

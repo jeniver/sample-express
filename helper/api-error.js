@@ -1,4 +1,6 @@
 const response = (status, message, data) => {
+    console.log("message api Erroe")
+    console.log(message)
     const resp = {
         status,
         message

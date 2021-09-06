@@ -2,9 +2,11 @@
 const UserService = require("../services/userServices");
 
 const singUp = async (req, res, next) => {
+  console.log("SignUp")
+  console.log(req.body)
   try {
-    const { name, email, password , phone_number } = req.body;
-    const data = await UserService.singUp(name, email, password , phone_number);
+    const { name, email, password , phoneNo } = req.body;
+    const data = await UserService.singUp(name, email, password , phoneNo);
     return res.status(data.status).json(data);
   } catch (error) {
     return next(error);
@@ -12,18 +14,22 @@ const singUp = async (req, res, next) => {
 };
 
 const singIn = async (req, res, next) => {
+  console.log("signIN")
+  console.log(req.body)
     try {
       const { email, password } = req.body;
       const data = await UserService.singIn( email, password);
       return res.status(data.status).json(data);
     } catch (error) {
+      console.log(error)
       return next(error);
     }
   };
 
   const getUserInfo = async (req, res, next) => {
     try {
-      const { userid } = req.body;
+      // const { userid } = req.body;
+      const userid="6133bb240b8c194e8003f918"
       const data = await UserService.getUserInfo(userid);
       return res.status(data.status).json(data);
     } catch (error) {
@@ -52,21 +58,21 @@ const singIn = async (req, res, next) => {
 
   
 const editUsers = async (req, res, next) => {
+  console.log("editUsers")
+  const obj=JSON.parse(req.body.data)
+  console.log(obj)
+  console.log(req.files)
   try {
     const {
-      name, 
+      userName, 
       email, 
-      password , 
-      phone_number,
-      user_level
-    } = req.body;
+      mobile
+    } = JSON.parse(req.body.data);
     const profile_Pic = req.files;
     const data = await UserService.UpdateUsers(
-      name, 
-      email, 
-      password , 
-      phone_number,
-      user_level,
+      userName, 
+      email,  
+      mobile,
       profile_Pic
     );
     return res.status(data.status).json(data);
