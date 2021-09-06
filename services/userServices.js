@@ -56,18 +56,18 @@ const singUp = async (name, email, password , phone_number) => {
     session.startTransaction();
     const userDetails = await User.find({ email });
     if (userDetails.length > 0) {
-        return BadRequest("Email Address already exist")
+        return BadRequest("Soory! Email Address already exist")
     } else {
       const newUser = new User({ name, email , mobile_number : phone_number, password : hash });
       const addUsers = await newUser.save({ session });
       if (addUsers) {
         await session.commitTransaction();
-        return Ok("Signup successfully",addUsers);
+        return Ok("Great Job! Signup successfully",addUsers);
       }
     }
   } catch (error) {
     await session.abortTransaction();
-    return formatError(error)
+    return BadRequest("Soory! Connection Error");
   } finally {
     session.endSession();
   }
@@ -157,7 +157,6 @@ const getAllUsers = async () => {
   }
 };
 
-
 const UpdateUsers = async (
   userName, 
       email, 
@@ -196,10 +195,40 @@ const UpdateUsers = async (
   } 
 }
 
+const AddUser = async (name, user_level,email,address, password , phoneNumber,pro_img) => {
+  console.log("UserService")
+  console.log(name,user_level,email,address,password,phoneNumber,pro_img)
+  let session = null;
+  let salt = bcrypt.genSaltSync(10);
+  let hash = bcrypt.hashSync(password, salt);
+  try {
+    session = await mongoose.startSession();
+    session.startTransaction();
+    const userDetails = await User.find({ email });
+    if (userDetails.length > 0) {
+        return Ok("Email Address already exist",userDetails)
+    } else {
+      const newUser = new User({ name, email ,user_level,profile_images:pro_img, mobile_number : phoneNumber, password : hash });
+      const addUsers = await newUser.save({ session });
+      if (addUsers) {
+        await session.commitTransaction();
+        return Ok("User add successfully",addUsers);
+      }
+    }
+  } catch (error) {
+    await session.abortTransaction();
+    return formatError(error)
+  } finally {
+    session.endSession();
+  }
+};
+
+
 module.exports = {
   singUp,
   singIn,
   getUserInfo,
   getAllUsers,
-  UpdateUsers
+  UpdateUsers,
+  AddUser
 };

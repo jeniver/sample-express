@@ -24,8 +24,8 @@ const io = socketio(server);
 
 app.use(express.urlencoded({extended : false}));
 
-const UserRouter = require("./route/index");
-
+const OldRouter = require("./route/index");
+const UserRouter=require("./route/userRouter");
 
 io.on('connect', (socket) => {
   socket.on('join', ({ name, room }, callback) => {
@@ -61,7 +61,8 @@ io.on('connect', (socket) => {
   })
 });
 
-app.use("/auth", UserRouter);
+app.use("/auth", OldRouter);
+app.use('/user',UserRouter)
 
 server.listen(process.env.PORT || port, () => console.log(`App running on port ${port}`));
 

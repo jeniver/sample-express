@@ -81,11 +81,42 @@ const editUsers = async (req, res, next) => {
   }
 };
 
+const addUser = async (req, res, next) => {
+  console.log("add Users userControllers")
+  const obj=JSON.parse(req.body.data)
+  console.log(obj)
+  console.log(req.files)
+  try {
+    const {
+      userName, 
+      email, 
+      address,
+      phoneNumber,
+      password
+    } = JSON.parse(req.body.data);
+    const pro_img= req.files;
+    const user_level="ADMIN"
+    const data = await UserService.AddUser(
+      userName, 
+      user_level,
+      email,  
+      address,
+      password,
+      phoneNumber,
+      pro_img
+    );
+    return res.status(data.status).json(data);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   singUp,
   singIn,
   getUserInfo,
   sendPasswordReset,
   getAllUsers,
-  editUsers
+  editUsers,
+  addUser
 };
