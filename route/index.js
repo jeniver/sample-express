@@ -2,7 +2,7 @@ const express = require("express");
 const { validationResult } = require("express-validator");
 const router = express.Router();
 const userController = require("../controller/userController");
-const EventControllers = require("../controller/eventControllers");
+const PoojaControllers = require("../controller/poojaControllers");
 const validator = require("../validater/userValidater");
 const Eventvalidator = require("../validater/eventValidater");
 const SongController = require("../controller/songController")
@@ -10,60 +10,16 @@ const Notification =require("../controller/notificationContrller");
 const {upload} = require('../helper/filehelper');
 const HotelReserversion = require('../controller/HotelResrversionControllers')
 const ProductController = require('../controller/ProductController');
-// const multer=require('multer');
+console.log(123)
 
-// const storage=multer.diskStorage({
-//   destination: function (req, file, cb) {
-//       cb(null, './uploads/');
-//   } ,
-//   filename: function (req,file,cb) {
-//       cb(null, file.originalname)
-//   }
-// });
-// const upload=multer({
-//   storage: storage,
-//   limit:{
-//       filesize: 1024*1024*5
-//   }
-// });
+//user
+router.post("user/signup",userController.singUp);
+router.post("user/signin", userController.singIn);
+// router.post("user/addUser",upload.array('files'),userController.addUser);
+router.post("user/userupdate" ,upload.array('files'), userController.editUsers);
+router.get("user/getuserinfo", userController.getUserInfo);
 
-
-
-// router.post("/signup", validator.registerProfile, (req, res, next) => {
-//   console.log("req")
-//   console.log(req.body)
-//   const validate = validationResult(req);
-//   if (!validate.isEmpty()) {
-//     return res.status(400).json({
-//       errors: validate.array().map(({ msg, param }) => ({ msg, param })),
-//     });
-//   }
-//   userController.singUp(req, res, next);
-// });
-
-router.post("/signup",userController.singUp);
-
-router.post("/signin", userController.singIn);
-
-router.post("/userupdate" ,upload.array('files'), userController.editUsers);
-
-router.get("/getuserinfo", userController.getUserInfo);
-
-router.get("/getusers", userController.getAllUsers);
-
-router.post("/createevent",EventControllers.addEvent)
-
-router.get("/getallevent", EventControllers.fetchAllEvents);
-
-router.get("/filter_event", EventControllers.fetchFilterEvents);
-
-router.get("/notification", Notification.notification);
-
-router.post("/uploadesong" , SongController.addSonges);
-
-router.get("/get_songe" , SongController.getSonges);
-
-router.post("/forgot-password",validator.forgetPassword, async (req, res, next) => {
+router.post("user/forgot-password",validator.forgetPassword, async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).json({
@@ -74,19 +30,59 @@ router.post("/forgot-password",validator.forgetPassword, async (req, res, next) 
 
 })
 
-router.post("/add-hotel" , upload.array('files') , HotelReserversion.addHotels )
-router.post("/edit-hotel" , upload.array('files') , HotelReserversion.editHotels )
-router.get("/getHotels" , HotelReserversion.getHotels )
-router.get("/hotelinfo" , HotelReserversion.getHotelInfo )
-router.get("/removeHotel" , HotelReserversion.removeHotel)
+//Pooja
+// router.post("/createPooja",PoojaControllers.addPooja);
+// router.post("/editPooja" , upload.array('files') , EventControllers.editPooja )
+// router.get("/getPooja", EventControllers.fetchAllPooja);
+// router.get("/filterPooja", EventControllers.fetchFilterPooja);
+// router.get("/removePooja" , EventControllers.removePooja)
+
+//Temple
+// router.post("/addTemple" , upload.array('files') , ProductController.addProduct )
+// router.post("/editTemple" , upload.array('files') , ProductController.editProducts )
+// router.get("/getTemple" , ProductController.getProducts )
+// router.get("/templeinfo" , ProductController.getProductInfo)
+// router.get("/removeTemple" , ProductController.removeProduct)
+
+//Product
+
+// router.post("/edit-prod" , upload.array('files') , ProductController.editProducts )
+// router.get("/getproduct" , ProductController.getProducts )
+// router.get("/productinfo" , ProductController.getProductInfo)
+// router.get("/removeproduct" , ProductController.removeProduct)
+
+//Chat
+
+//Songs
+// router.post("/addSong" , SongController.addSonges);
+// router.get("/get_songe" , SongController.getSonges);
+
+//Campaign
+// router.post("/addCampaign" , SongController.addSonges);
+
+//Order details
+
+//Hotel Reserversion
+// router.post("/add-hotel" , upload.array('files') , HotelReserversion.addHotels )
+// router.post("/edit-hotel" , upload.array('files') , HotelReserversion.editHotels )
+// router.get("/getHotels" , HotelReserversion.getHotels )
+// router.get("/hotelinfo" , HotelReserversion.getHotelInfo )
+// router.get("/removeHotel" , HotelReserversion.removeHotel)
+
+//Booking List
+
+//Taxi Booking
+
+//Payment
+// router.post('/razorpay',ProductController.razorpay_payment);
+
+//notification
+// router.get("/notification", Notification.notification);
 
 
-router.post("/add-prod" , upload.array('files') , ProductController.addProduct )
-router.post("/edit-prod" , upload.array('files') , ProductController.editProducts )
-router.get("/getproduct" , ProductController.getProducts )
-router.get("/productinfo" , ProductController.getProductInfo)
-router.get("/removeproduct" , ProductController.removeProduct)
 
-router.post('/razorpay',ProductController.razorpay_payment);
+
+
+
 
 module.exports = router;

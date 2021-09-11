@@ -1,5 +1,6 @@
 
 const UserService = require("../services/userServices");
+console.log("userController")
 
 const singUp = async (req, res, next) => {
   console.log("SignUp")
@@ -82,7 +83,7 @@ const editUsers = async (req, res, next) => {
 };
 
 const addUser = async (req, res, next) => {
-  console.log("add Users userControllers")
+  console.log("add Users userControllers11")
   const obj=JSON.parse(req.body.data)
   console.log(obj)
   console.log(req.files)
@@ -92,10 +93,10 @@ const addUser = async (req, res, next) => {
       email, 
       address,
       phoneNumber,
-      password
+      password,
+      user_level,
     } = JSON.parse(req.body.data);
     const pro_img= req.files;
-    const user_level="ADMIN"
     const data = await UserService.AddUser(
       userName, 
       user_level,

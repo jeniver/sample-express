@@ -1,24 +1,23 @@
 const SongServices = require("../services/songServics");
+console.log("song controller")
 
-const addSonges = async (req, res, next) => {
+const addSongs = async (req, res, next) => {
   try {
     const {
-        userId,
-        albumname,
-        songname,
-        discription,
-        createduser,
-        image,
-        url,
-    } = req.body;
-    const data = await SongServices.addSones(
-        userId,
-        albumname,
-        songname,
-        discription,
-        createduser,
-        image,
-        url,
+      album_name,
+      song_name,
+      singer,
+    } = JSON.parse(req.body.data);
+    const song_images = req.files;
+    console.log("Files")
+    console.log(song_images)
+    const url="";
+    const data = await SongServices.addSongs(
+      album_name,
+      song_name,
+      singer,
+      song_images,
+      url
     );
     return res.status(data.status).json(data);
   } catch (error) {
@@ -36,6 +35,6 @@ const getSonges = async (req, res, next) => {
 };
 
 module.exports = {
-  addSonges,
+  addSongs,
   getSonges
 };

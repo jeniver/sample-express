@@ -2,25 +2,29 @@ const ProductServices = require("../services/productService");
 const Razorpay=require('razorpay');
 const shortid=require('shortid');
 const cors=require('cors')
+console.log("product controller")
 
 const addProduct = async (req, res, next) => {
   try {
     const {
-        userId,
-        titel,
-        prodtype,
-        discription,
+        name,
+        productType,
+        currencyType,
         price,
-        discount
-    } = req.body;
+        discountType,
+        discountAmount,
+        description,      
+   } =JSON.parse(req.body.data);
     const files = req.files;
+    
     const data = await ProductServices.addProducts(
-        userId,
-        titel,
-        prodtype,
-        discription,
-        price,
-        discount,
+      name,
+      productType,
+      currencyType,
+      price,
+      discountType,
+      discountAmount,
+      description,
       files
     );
     return res.status(data.status).json(data);

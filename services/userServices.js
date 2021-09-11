@@ -196,8 +196,6 @@ const UpdateUsers = async (
 }
 
 const AddUser = async (name, user_level,email,address, password , phoneNumber,pro_img) => {
-  console.log("UserService")
-  console.log(name,user_level,email,address,password,phoneNumber,pro_img)
   let session = null;
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(password, salt);
@@ -208,7 +206,7 @@ const AddUser = async (name, user_level,email,address, password , phoneNumber,pr
     if (userDetails.length > 0) {
         return Ok("Email Address already exist",userDetails)
     } else {
-      const newUser = new User({ name, email ,user_level,profile_images:pro_img, mobile_number : phoneNumber, password : hash });
+      const newUser = new User({ name, email ,address,user_level,profile_images:pro_img, mobile_number : phoneNumber, password : hash });
       const addUsers = await newUser.save({ session });
       if (addUsers) {
         await session.commitTransaction();

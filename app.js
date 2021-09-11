@@ -26,6 +26,10 @@ app.use(express.urlencoded({extended : false}));
 
 const OldRouter = require("./route/index");
 const UserRouter=require("./route/userRouter");
+const ProductRouter=require("./route/productRouter");
+const TempleRouter=require("./route/templeRouter");
+const PoojaRouter=require("./route/poojaRouter");
+const SongRouter=require("./route/songRouter")
 
 io.on('connect', (socket) => {
   socket.on('join', ({ name, room }, callback) => {
@@ -62,7 +66,11 @@ io.on('connect', (socket) => {
 });
 
 app.use("/auth", OldRouter);
-app.use('/user',UserRouter)
+app.use('/user',UserRouter);
+app.use('/product',ProductRouter);
+app.use('/temple',TempleRouter);
+app.use('/pooja',PoojaRouter);
+app.use('/song',SongRouter);
 
 server.listen(process.env.PORT || port, () => console.log(`App running on port ${port}`));
 

@@ -4,13 +4,15 @@ const { Schema } = mongoose;
 
 const productSchema = new Schema({
   prod_id:{type:Number , default:null},
-  user_id: { type: Schema.Types.ObjectId, required: false },
-  titel:{ type: String, required: false },
-  prod_type: { type: String, default: 'BR', required: false },
+  // user_id: { type: Schema.Types.ObjectId, required: false },
+  name:{ type: String, required: false },
+  productType: { type: String, default: 'BR', required: false },
+  currencyType:{ type: String,  required: false },
+  price : { type: Number,  required: false },
+  discountType:{ type: String, required: false },
+  discountAmount:{ type: Number, required: false },
+  description: { type: String, required: false },
   prod_images: [Object],
-  discription: { type: String, required: false },
-  discount:{ type: String, required: false },
-  price : { type: String,  required: false },
   created: { type: Date, default: Date.now, required: false },
   updated: { type: Date, default: Date.now, required: false },
 });

@@ -1,10 +1,10 @@
 const express = require("express");
 const { validationResult } = require("express-validator");
 const router = express.Router();
-const userController = require("../controller/userController");
+const PoojaController = require("../controller/poojaControllers");
 const {upload} = require('../helper/filehelper');
 
-router.post("/addUser",upload.array('files'),userController.addUser);
-router.get("/getusers", userController.getAllUsers);
+router.post("/addPooja" , upload.array('files') , PoojaController.addPooja)
+router.get("/getAllPooja" , PoojaController.getAllPooja )
 
 module.exports = router;
