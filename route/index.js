@@ -12,7 +12,7 @@ const {upload} = require('../helper/filehelper');
 const HotelReserversion = require('../controller/HotelResrversionControllers')
 const ProductController = require('../controller/ProductController');
 const PaymentController=require('../controller/paymentController')
-
+const DonationController = require('../controller/DonationController');
 
 router.post("/signup", validator.registerProfile, (req, res, next) => {
   const validate = validationResult(req);
@@ -64,5 +64,6 @@ router.get("/productinfo" , ProductController.getProductInfo)
 router.get("/removeproduct" , ProductController.removeProduct)
 
 router.post('/razorpay',ProductController.razorpay_payment);
+router.post('/donation', DonationController.createDonation);
 
 module.exports = router;
