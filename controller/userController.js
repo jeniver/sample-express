@@ -25,12 +25,13 @@ const singIn = async (req, res, next) => {
       console.log(error)
       return next(error);
     }
-  };
+};
 
   const getUserInfo = async (req, res, next) => {
+    console.log("getUserInfo")
     try {
       // const { userid } = req.body;
-      const userid="6133bb240b8c194e8003f918"
+      const userid="613cdaa2d413593e5cce242d"
       const data = await UserService.getUserInfo(userid);
       return res.status(data.status).json(data);
     } catch (error) {

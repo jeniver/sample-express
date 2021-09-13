@@ -65,7 +65,7 @@ io.on('connect', (socket) => {
   })
 });
 
-app.use("/auth", OldRouter);
+// app.use("/auth", OldRouter);
 app.use('/user',UserRouter);
 app.use('/product',ProductRouter);
 app.use('/temple',TempleRouter);

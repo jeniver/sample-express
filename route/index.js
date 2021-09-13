@@ -13,11 +13,11 @@ const ProductController = require('../controller/ProductController');
 console.log(123)
 
 //user
-router.post("user/signup",userController.singUp);
-router.post("user/signin", userController.singIn);
+router.post("auth/signup",userController.singUp);
+// router.post("auth/signin", userController.singIn);
 // router.post("user/addUser",upload.array('files'),userController.addUser);
-router.post("user/userupdate" ,upload.array('files'), userController.editUsers);
-router.get("user/getuserinfo", userController.getUserInfo);
+// router.post("user/userupdate" ,upload.array('files'), userController.editUsers);
+// router.get("user/getuserinfo", userController.getUserInfo);
 
 router.post("user/forgot-password",validator.forgetPassword, async (req, res, next) => {
   const errors = validationResult(req)
